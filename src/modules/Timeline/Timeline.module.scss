@@ -1,0 +1,53 @@
+.timeline {
+    background: rgba(26, 28, 40, 0.7);
+    border-radius: 20px;
+    padding: 60px;
+    padding-top: 100px;
+    width: 618px;
+    margin-left: auto;
+    margin-top: auto;
+    backdrop-filter: blur(2px);
+
+
+    .title {
+        padding: 10px 20px;
+        padding-bottom: 5px;
+        border-radius: 0 0 30px 30px;
+        background: rgba(0, 0, 0, 0.2);
+        border-bottom: 1px solid theme('colors.main.yellow');
+    }
+
+    .timeline_list {
+
+        &:after,
+        &:before {
+            content: '';
+            position: absolute;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            left: -36px;
+            background: linear-gradient(90deg, #f6df75 0%, #ffb200 58.65%, #fbe47c 79.33%, #efd86e 97.6%);
+            ;
+        }
+
+        &:after {
+            bottom: 5px;
+        }
+
+        &:before {
+            top: 5px;
+        }
+
+        .divider {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -30px;
+            bottom: 0;
+            width: 1px;
+            height: calc(100% - 10px);
+            margin: 0 !important;
+        }
+    }
+}

@@ -1,0 +1,25 @@
+.form {
+
+    .form_fields {
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            width: 1px;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom,
+                    theme('colors.gradient.second') 0%,
+                    theme('colors.gradient.second') 50%,
+                    theme('colors.gradient.second') 100%);
+            opacity: 1;
+
+            mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
+            // border-radius: 50%;
+        }
+    }
+}

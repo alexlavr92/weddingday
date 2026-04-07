@@ -1,0 +1,62 @@
+@font-face {
+    font-family: 'Baskerville';
+    src: url('../assets/fonts/BaskervilleCyrLTStd-Incline.eot');
+    src: local('Baskerville Inclined'), local('Baskerville-Incline'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Incline.eot?#iefix') format('embedded-opentype'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Incline.woff2') format('woff2'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Incline.woff') format('woff'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Incline.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Baskerville';
+    src: url('../assets/fonts/BaskervilleCyrLTStd-Bold.eot');
+    src: local('Baskerville Bold'), local('Baskerville-Bold'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Bold.eot?#iefix') format('embedded-opentype'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Bold.woff2') format('woff2'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Bold.woff') format('woff'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Baskerville';
+    src: url('../assets/fonts/BaskervilleCyrLTStd-Upright.eot');
+    src: local('Baskerville Upright'), local('Baskerville-Upright'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Upright.eot?#iefix') format('embedded-opentype'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Upright.woff2') format('woff2'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Upright.woff') format('woff'),
+        url('../assets/fonts/BaskervilleCyrLTStd-Upright.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Bickham Script One';
+    src: url('../assets/fonts/BickhamScriptOne.eot');
+    src: url('../assets/fonts/BickhamScriptOne.eot?#iefix') format('embedded-opentype'),
+        url('../assets/fonts/BickhamScriptOne.woff2') format('woff2'),
+        url('../assets/fonts/BickhamScriptOne.woff') format('woff'),
+        url('../assets/fonts/BickhamScriptOne.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Aboreto';
+    src: url('../assets/fonts/Aboreto-Regular.eot');
+    src: url('../assets/fonts/Aboreto-Regular.eot?#iefix') format('embedded-opentype'),
+        url('../assets/fonts/Aboreto-Regular.woff2') format('woff2'),
+        url('../assets/fonts/Aboreto-Regular.woff') format('woff'),
+        url('../assets/fonts/Aboreto-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

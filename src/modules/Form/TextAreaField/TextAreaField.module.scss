@@ -1,0 +1,34 @@
+.textarea_wrapper {
+    position: relative;
+
+    textarea {
+        width: 100%;
+        outline: none;
+        background: rgba(#000000, .2);
+        border: 1px solid rgba(#ffffff, .1);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1;
+        transition: all .3s ease;
+        height: 60px;
+        overflow: auto;
+        resize: none;
+
+        &.filled,
+        &:hover,
+        &:focus {
+            border-color: rgba(#ffffff, .5)
+        }
+
+        &::placeholder {
+            color: rgba(#ffffff, .4);
+            transition: all .2s ease;
+        }
+
+        &:focus::placeholder {
+            opacity: 0;
+        }
+    }
+}

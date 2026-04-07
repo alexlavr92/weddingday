@@ -1,0 +1,110 @@
+import { useEffect, useRef, useState } from "react";
+
+export default function IntroVideo({
+    mobileSrc,
+    desktopSrc,
+    children
+}) {
+    const videoRef = useRef(null);
+    const [isFinished, setIsFinished] = useState(false);
+    const [src, setSrc] = useState(null);
+    const [fadeOut, setFadeOut] = useState(false);
+
+    // Выбор видео по разрешению
+    useEffect(() => {
+        const width = window.innerWidth;
+        setSrc(width < 768 ? mobileSrc : desktopSrc);
+    }, []);
+
+    // Автозапуск + iOS fix
+    useEffect(() => {
+        if (!src || !videoRef.current) return;
+
+        const video = videoRef.current;
+
+        const playVideo = () => {
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // iOS блокирует autoplay → можно показать кнопку Play
+                });
+            }
+        };
+
+        playVideo();
+
+        const handleEnd = () => {
+            setFadeOut(true);
+            setTimeout(() => setIsFinished(true), 700);
+        };
+
+        video.addEventListener("ended", handleEnd);
+
+        return () => video.removeEventListener("ended", handleEnd);
+    }, [src]);
+
+    // Блокировка скролла
+    useEffect(() => {
+        if (!isFinished) {
+            document.body.style.overflow = "hidden";
+        } else {
+            window.scrollTo(0, 0);
+            document.body.style.overflow = "";
+        }
+        return () => (document.body.style.overflow = "");
+    }, [isFinished]);
+
+    const skipIntro = () => {
+        setFadeOut(true);
+        setTimeout(() => setIsFinished(true), 700);
+    };
+
+    return (
+        <>
+            {/* Intro overlay */}
+            <div
+                className={`fixed inset-0 bg-black flex items-center justify-center z-[999] transition-opacity duration-700 ${fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
+                    }`}
+            >
+                {src && (
+                    <video
+                        ref={videoRef}
+                        src={src}
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        muted
+                        playsInline
+                    />
+                )}
+
+                {/* Fade-to-black слой */}
+                <div
+                    className={`absolute inset-0 bg-black transition-opacity duration-700 ${fadeOut ? "opacity-100" : "opacity-0"
+                        }`}
+                />
+
+                {/* Skip intro */}
+                {/* <button
+                    onClick={skipIntro}
+                    className="absolute bottom-10 px-6 py-3 bg-white/20 backdrop-blur-md text-white rounded-xl border border-white/30 hover:bg-white/30 transition"
+                >
+                    Skip intro
+                </button> */}
+            </div>
+
+            {/* Контент */}
+            <div
+                className={`
+        transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]
+        ${isFinished
+                        ? "opacity-100 blur-0"
+                        : "opacity-0 blur-[8px]"
+                    }
+    `}
+            >
+                {children}
+            </div>
+
+        </>
+    );
+}
