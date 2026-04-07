@@ -361,7 +361,9 @@ export default function Form() {
             {/* Модалка */}
             {showModal && (
                 <div
-                    className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] animate-fadeIn"
+                    className="fixed top-0 left-0 w-screen h-screen
+        bg-black/60 flex items-center justify-center
+        z-[2000] animate-fadeIn"
                     onClick={() => setShowModal(false)} // ← клик по overlay
                 >
                     <div
