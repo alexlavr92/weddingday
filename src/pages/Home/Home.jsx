@@ -7,22 +7,17 @@ import Contacts from "../../modules/Contacts/Contacts";
 import ComingSoon from '../../modules/ComingSoon/ComingSoon'
 import MiddleBlock from "../../modules/MiddleBlock/MiddleBlock";
 
-import IntroVideo from "../../modules/IntroVideo/IntroVideo";
-import introDesktop from "../../assets/videos/intro-desktop.mp4";
-import introMobile from "../../assets/videos/intro-mobile.mp4";
+
 
 
 export default function Home() {
     return (
-        <IntroVideo
-            desktopSrc={introDesktop}
-            mobileSrc={introMobile}
-        >
+        <>
             <Hero />
             <ComingSoon />
             <MiddleBlock />
             <Form />
             <Contacts />
-        </IntroVideo>
+        </>
     );
 }

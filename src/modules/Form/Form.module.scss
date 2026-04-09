@@ -20,6 +20,12 @@
 
             mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
             // border-radius: 50%;
+
+            @media screen {
+                @media (max-width: 1279px) {
+                    content: none;
+                }
+            }
         }
     }
 }

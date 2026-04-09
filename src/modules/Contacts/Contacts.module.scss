@@ -8,10 +8,55 @@
         border-radius: 30px;
         border-bottom: 1px solid theme('colors.third.yellow');
 
-        img {
+        @media screen {
+            @media (max-width: 1279px) {
+                width: 100%;
+                max-width: 566px;
+            }
+
+            @media (max-width: 767px) {
+                padding: 30px 10px;
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+            }
+        }
+
+        >a:first-child {
             position: absolute;
-            bottom: 30px;
-            right: 30px;
+            bottom: 1.5vw;
+            right: 1.5vw;
+
+            @media screen {
+                @media (max-width: 1279px) {
+                    bottom: 30px;
+                    right: 30px;
+                }
+
+                @media (max-width: 767px) {
+                    bottom: auto;
+                    right: auto;
+                    margin: 0 auto;
+                    // width: 40px;
+                    position: relative;
+                    order: 1;
+                    margin-top: 20px;
+                }
+            }
+        }
+
+        img {
+            display: block;
+
+            @media screen {
+                @media (max-width: 767px) {
+
+                    width: 100%;
+                    // height: 40px;
+                    // object-fit: contain;
+                    // object-position: center;
+                }
+            }
         }
     }
 }

@@ -3,17 +3,39 @@
     &:after {
         content: '';
         position: absolute;
-        bottom: 0;
+        bottom: 16%;
         left: 0;
         right: 0;
-        height: 40vw;
-        min-height: 770px;
+        height: 90vw;
+        // min-height: 770px;
         background: linear-gradient(180deg, rgba(11, 21, 33, 0) 0%, #1a1c28 100%);
         z-index: -1;
     }
 
+    @media screen {
+        @media screen and (min-width:1280px) {
+            &:after {
+                height: 40vw;
+                min-height: 770px;
+                bottom: 0;
+            }
+        }
+    }
+
     .location {
-        height: 60vw;
+
+        @media screen {
+            @media (min-width: 768px) {
+                height: 75vw;
+                min-height: 1150px;
+            }
+
+            @media (min-width: 1536px) {
+                height: 60vw;
+                // min-height: 921px;
+            }
+        }
+
     }
 
     .location_stars {
@@ -29,8 +51,14 @@
             left: 0;
             right: 0;
             top: 0;
-            height: 638px;
+            height: 30%;
             background: linear-gradient(0deg, rgba(11, 21, 33, 0) 0%, #1a1c28 100%);
+
+            @media screen {
+                @media (min-width: 768px) {
+                    height: 638px;
+                }
+            }
         }
 
         &:before {
@@ -39,8 +67,14 @@
             left: 0;
             right: 0;
             bottom: 0;
-            height: 638px;
+            height: 30%;
             background: linear-gradient(180deg, rgba(11, 21, 33, 0) 0%, #1a1c28 100%);
+
+            @media screen {
+                @media (min-width: 768px) {
+                    height: 638px;
+                }
+            }
         }
     }
 
@@ -55,6 +89,13 @@
             height: 428px;
             background: linear-gradient(0deg, rgba(11, 21, 33, 0) 0%, #1a1c28 100%);
             z-index: -1;
+
+            @media screen {
+                @media (max-width: 767px) {
+                    height: 100vw;
+                    top: 0;
+                }
+            }
         }
 
         >img {
@@ -69,13 +110,24 @@
             div:last-child:before {
                 content: '';
                 position: absolute;
-                top: 16px;
+                top: -28px;
                 left: 0;
                 width: 44px;
                 height: 54px;
                 background-image: url(../../assets/images/middleblock/star-mini.png);
                 background-position: center;
                 background-repeat: no-repeat;
+
+                @media screen {
+                    @media (min-width: 1280px) {
+                        top: 16px;
+                    }
+
+                    @media (max-width: 767px) {
+                        left: -10px
+                    }
+                }
+
             }
         }
     }

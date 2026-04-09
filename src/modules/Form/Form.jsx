@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
 import Container from "../../components/layout/Container/Container";
@@ -11,10 +12,13 @@ import TextAreaField from "./TextAreaField/TextAreaField";
 import styles from "./Form.module.scss";
 import bgStar from "../../assets/images/anket/star-bottom.png";
 import bird from "../../assets/images/anket/bird.png";
+import a from "../../assets/images/form/a.svg";
 
 export default function Form() {
     const [showModal, setShowModal] = useState(false);
     const [isSending, setIsSending] = useState(false);
+    const startTime = useRef(Date.now());
+
 
     const {
         register,
@@ -57,35 +61,49 @@ export default function Form() {
     }, [showModal]);
 
     const onSubmit = async (data) => {
-        setShowModal(true);
-        reset();
-        // try {
-        //     setIsSending(true);
+        // setShowModal(true);
+        // console.log("DATA:", data);              // объект
+        // console.log("JSON:", JSON.stringify(data)); // строка JSON
+        // reset();
+        // HONEYPOT
+        if (data.botField) {
+            console.warn("BOT DETECTED (honeypot)");
+            return;
+        }
+        // TIMER
+        const timeSpent = Date.now() - startTime.current;
+        if (timeSpent < 1500) {
+            console.warn("BOT DETECTED (too fast)");
+            return;
+        }
 
-        //     const res = await fetch("/send.php", {
-        //         method: "POST",
-        //         body: JSON.stringify(data)
-        //     });
+        try {
+            setIsSending(true);
 
-        //     const json = await res.json();
+            const res = await fetch("/send.php", {
+                method: "POST",
+                body: JSON.stringify(data)
+            });
 
-        //     if (!json.ok) throw new Error(json.error);
+            const json = await res.json();
 
-        //     setShowModal(true);
-        //     reset();
-        // } catch (e) {
-        //     console.error("Ошибка отправки:", e);
-        // } finally {
-        //     setIsSending(false);
-        // }
+            if (!json.ok) throw new Error(json.error);
+
+            setShowModal(true);
+            reset();
+        } catch (e) {
+            console.error("Ошибка отправки:", e);
+        } finally {
+            setIsSending(false);
+        }
     };
 
 
     return (
-        <section className="relative py-[6.5rem] mx-auto">
+        <section className="relative pt-[6.5rem] pb-[50px] md:py-[6.5rem] mx-auto">
             {/* Декор */}
-            <img src={bgStar} alt="" className="absolute -top-[20rem] left-0 w-[25%] -z-[1]" />
-            <img src={bird} alt="" className="absolute left-[1rem] -top-[13rem] w-[28%]" />
+            <img src={bgStar} alt="" className="absolute -top-[40vw] md:-top-[20vw] w-[70%] md:w-[30%] xl:-top-[20rem] left-0 xl:w-[25%] -z-[1]" />
+            <img src={bird} alt="" className="absolute -left-[2rem] md:left-[1rem] -top-[25vw] md:-top-[10vw] w-[70%] md:w-[30%] xl:-top-[13rem] xl:w-[28%]" />
 
             <Container className="flex justify-center reveal">
                 <form
@@ -93,27 +111,29 @@ export default function Form() {
                     onSubmit={handleSubmit(onSubmit)}
                     className={`
             ${styles.form}
-            relative mx-auto min-w-[1160px]
-            rounded-[20px] px-[5rem] pt-[10rem] pb-[3rem]
-            border border-third-yellow
+            relative mx-auto xl:min-w-[1160px]
+            rounded-[20px] px-[10px] pt-[90px] pb-[40px] md:px-[5rem] md:pt-[9rem] xl:pt-[10rem] md:pb-[3rem]
+            border border-third-yellow md:w-full xl:w-auto
           `}
                 >
                     {/* Заголовок */}
-                    <div className="uppercase text-center text-[2.5rem] tracking-tight absolute left-1/2 -translate-x-1/2 -top-[10px]">
-                        <span className="font-second leading-[.5] text-[9rem] text-main-yellow mr-[10px]">А</span>
-                        <span className="gradient-default title_gradient">нкета</span><br />
+                    <div className="uppercase text-nowrap text-center text-[1.3rem] md:text-[2rem] xl:text-[2.5rem] tracking-tight absolute left-1/2 -translate-x-1/2 -top-[7px] md:-top-[10px]">
+                        <div className="flex items-end justify-center">
+                            <img src={a} className="xl:mb-[10px] max-w-[18vw] md:max-w-[12vw] mb-[7px] md:mb-[10px]" alt="" />
+                            <span className="gradient-default title_gradient xl:right-[1.5rem] right-[4vw] md:right-[2vw] relative">нкета</span></div>
                         <span className="gradient-default title_gradient">для присутствующих</span>
+
                     </div>
 
-                    <div className={`${styles.form_fields} flex justify-between items-start`}>
+                    <div className={`${styles.form_fields} flex xl:flex-row flex-col gap-[40px] xl:gap-0 justify-between items-start`}>
                         {/* Левая колонка */}
-                        <div className="flex flex-col gap-y-[40px] items-start">
+                        <div className="flex flex-col w-full xl:w-auto gap-y-[40px] items-start">
                             {/* ФИО */}
                             <InputField
                                 label="Фамилия Имя Отчество"
                                 id="fio"
                                 placeholder="Напишите ваши ФИО"
-                                wrapperClass="w-[400px]"
+                                wrapperClass="xl:w-[400px] w-full"
                                 error={errors.fio?.message}
                                 {...register("fio", {
                                     required: "Заполните обязательное поле"
@@ -121,7 +141,7 @@ export default function Form() {
                             />
 
                             {/* Придёте? */}
-                            <div className="w-[400px]">
+                            <div className="xl:w-[400px] w-full">
                                 <p className="text-[1.15rem] mb-[20px]">Сможете прийти на нашу свадьбу?</p>
                                 <div className={`flex flex-col gap-[10px] ${errors.come ? "error-group" : ""}`}>
                                     <Radio
@@ -150,7 +170,7 @@ export default function Form() {
                             </div>
 
                             {/* Пара */}
-                            <div className="w-[400px]">
+                            <div className="xl:w-[400px] w-full">
                                 <p className="text-[1.15rem] mb-[20px]">Будете ли вы с парой? Если да, введите ФИО</p>
                                 <div className={`flex flex-col gap-[10px] ${errors.together ? "error-group" : ""}`}>
                                     <Radio
@@ -178,9 +198,10 @@ export default function Form() {
                                 {hasTogether && (
                                     <div className="mt-[20px] animate-fadeIn">
                                         <InputField
+                                            label="ФИО вашей пары"
                                             id="partnerFio"
-                                            placeholder="Начните вводить"
-                                            wrapperClass="w-[400px]"
+                                            placeholder="Напишите ФИО"
+                                            wrapperClass="xl:w-[400px] w-full"
                                             error={errors.partnerFio?.message}
                                             {...register("partnerFio", {
                                                 validate: (v) =>
@@ -194,7 +215,7 @@ export default function Form() {
                             </div>
 
                             {/* Дресс-код */}
-                            <div className="w-[400px]">
+                            <div className="xl:w-[400px] w-full">
                                 <p className="text-[1.15rem] mb-[20px]">Вы поддержите наш дресс-код Total black?</p>
                                 <div className={`flex flex-col gap-[10px] ${errors.dresscode ? "error-group" : ""}`}>
                                     <Radio
@@ -224,9 +245,9 @@ export default function Form() {
                         </div>
 
                         {/* Правая колонка */}
-                        <div className="flex flex-col gap-y-[40px] items-start">
+                        <div className="flex flex-col gap-y-[40px] items-start w-full xl:w-auto">
                             {/* Еда */}
-                            <div className="w-[400px]">
+                            <div className="xl:w-[400px] w-full">
                                 <p className="text-[1.15rem] mb-[20px]">Предпочтения по еде</p>
                                 <div className={`flex flex-col gap-[10px] ${errors.food ? "error-group" : ""}`}>
                                     <Checkbox
@@ -275,7 +296,7 @@ export default function Form() {
                                         <TextAreaField
                                             id="allergyText"
                                             placeholder="Укажите на что у вас аллергия"
-                                            wrapperClass="w-[400px]"
+                                            wrapperClass="xl:w-[400px] w-full"
                                             error={errors.allergyText?.message}
                                             {...register("allergyText", {
                                                 validate: (v) =>
@@ -290,7 +311,7 @@ export default function Form() {
                             </div>
 
                             {/* Напитки */}
-                            <div className="w-[400px]">
+                            <div className="xl:w-[400px] w-full">
                                 <p className="text-[1.15rem] mb-[20px]">Предпочтения по напиткам</p>
                                 <div className={`flex flex-col gap-[10px] ${errors.drinks ? "error-group" : ""}`}>
                                     <Checkbox
@@ -337,13 +358,21 @@ export default function Form() {
                             </div>
                         </div>
                     </div>
-
+                    {/* HONEYPOT — вставить СЮДА */}
+                    <div style={{ display: "none" }}>
+                        <input
+                            type="text"
+                            autoComplete="off"
+                            tabIndex="-1"
+                            {...register("botField")}
+                        />
+                    </div>
                     {/* Кнопка */}
                     <button
                         type="submit"
                         disabled={isSending}
                         className={`
-              mt-[50px] block mx-auto btn gradient-default btnShine w-[460px]
+              mt-[50px] block mx-auto btn gradient-default btnShine w-full md:w-[460px]
               transition-transform duration-300 hover:scale-[1.02]
               ${isSending ? "opacity-60 cursor-not-allowed" : ""}
             `}
@@ -351,9 +380,8 @@ export default function Form() {
                         {isSending ? "Отправка..." : "Отправить ответы"}
                     </button>
 
-                    <p className="text-center text-[1rem] mt-[30px] w-[460px] mx-auto leading-[1.2]">
-                        По всем вопросам можете обращаться к организаторам<br />
-                        Пожалуйста, подтвердите присутствие до 1 июня 2026
+                    <p className="text-center text-[1rem] mt-[30px] md:w-[460px] mx-auto leading-[1.2]">
+                        По всем вопросам можете обращаться к организаторам.<br className="hidden md:block"></br> Пожалуйста, подтвердите присутствие до 1 июня 2026
                     </p>
                 </form>
             </Container>
@@ -367,7 +395,7 @@ export default function Form() {
                     onClick={() => setShowModal(false)} // ← клик по overlay
                 >
                     <div
-                        className="bg-[#111] text-white rounded-2xl px-10 py-8 w-[420px] text-center shadow-2xl animate-scaleIn border border-third-yellow"
+                        className="bg-[#111] text-white rounded-2xl px-10 py-8 w-[90%] md:w-[420px] text-center shadow-2xl animate-scaleIn border border-third-yellow"
                         onClick={(e) => e.stopPropagation()} // ← блокируем закрытие при клике по окну
                     >
                         <h2 className="text-2xl mb-4">Спасибо за ваши ответы!</h2>

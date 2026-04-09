@@ -7,14 +7,17 @@ export default function IntroVideo({
 }) {
     const videoRef = useRef(null);
     const [isFinished, setIsFinished] = useState(false);
-    const [src, setSrc] = useState(null);
+    // const [src, setSrc] = useState(null);
     const [fadeOut, setFadeOut] = useState(false);
+    const [contentVisible, setContentVisible] = useState(false);
+    const src = desktopSrc
+
 
     // Выбор видео по разрешению
-    useEffect(() => {
-        const width = window.innerWidth;
-        setSrc(width < 768 ? mobileSrc : desktopSrc);
-    }, []);
+    // useEffect(() => {
+    //     const width = window.innerWidth;
+    //     setSrc(width < 768 ? mobileSrc : desktopSrc);
+    // }, []);
 
     // Автозапуск + iOS fix
     useEffect(() => {
@@ -35,7 +38,10 @@ export default function IntroVideo({
 
         const handleEnd = () => {
             setFadeOut(true);
-            setTimeout(() => setIsFinished(true), 700);
+            setTimeout(() => {
+                setIsFinished(true);
+                setTimeout(() => setContentVisible(true), 50); // даём 1 тик рендеру
+            }, 700);
         };
 
         video.addEventListener("ended", handleEnd);
@@ -83,7 +89,7 @@ export default function IntroVideo({
                         <video
                             ref={videoRef}
                             src={src}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-center"
                             autoPlay
                             muted
                             playsInline
@@ -107,17 +113,18 @@ export default function IntroVideo({
             )}
 
             {/* Контент */}
-            <div
-                className={`
-        transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]
-        ${isFinished
-                        ? "opacity-100"
-                        : "opacity-0"
-                    }
-    `}
-            >
-                {children}
-            </div>
+            {isFinished && (
+                <div
+                    className={`
+            transition-opacity duration-[1200ms]
+            ${contentVisible ? "opacity-100" : "opacity-0"}
+        `}
+                >
+                    {children}
+                </div>
+            )}
+
+
 
         </>
     );

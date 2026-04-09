@@ -2,16 +2,18 @@ import { useEffect } from "react";
 
 export default function useScrollReveal(options = {}) {
     useEffect(() => {
-        const elements = document.querySelectorAll(".reveal");
+        const revealClass = "reveal";
+        const visibleClass = "reveal-visible";
 
-        if (!elements.length) return;
+        const elements = new Set();
 
-        const observer = new IntersectionObserver(
+        // IntersectionObserver — анимация появления
+        const io = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add("reveal-visible");
-                        observer.unobserve(entry.target);
+                        entry.target.classList.add(visibleClass);
+                        io.unobserve(entry.target);
                     }
                 });
             },
@@ -21,8 +23,44 @@ export default function useScrollReveal(options = {}) {
             }
         );
 
-        elements.forEach((el) => observer.observe(el));
+        // Функция для подключения новых элементов
+        const observeNewElements = (root = document) => {
+            root.querySelectorAll(`.${revealClass}`).forEach((el) => {
+                if (!elements.has(el)) {
+                    elements.add(el);
+                    io.observe(el);
+                }
+            });
+        };
 
-        return () => observer.disconnect();
+        // MutationObserver — следит за появлением новых reveal-элементов
+        const mo = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1) {
+                        // Если сам узел — reveal
+                        if (node.classList?.contains(revealClass)) {
+                            observeNewElements(node);
+                        }
+                        // Если внутри есть reveal
+                        observeNewElements(node);
+                    }
+                });
+            });
+        });
+
+        // Запускаем наблюдение за всем документом
+        mo.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // Подключаем reveal-элементы, которые уже есть
+        observeNewElements();
+
+        return () => {
+            io.disconnect();
+            mo.disconnect();
+        };
     }, []);
 }

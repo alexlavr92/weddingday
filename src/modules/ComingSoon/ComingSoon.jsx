@@ -1,7 +1,7 @@
 import styles from "./Coming.module.scss";
 import Container from "../../components/layout/Container/Container";
 import BlikImg from '../../assets/images/comingsoon/blik.svg';
-import BlikImg_2 from '../../assets/images/comingsoon/blik2.svg';
+import C from '../../assets/images/comingsoon/c.svg';
 import M from '../../assets/images/comingsoon/m.svg'
 
 export default function ComingSoon() {
@@ -9,23 +9,22 @@ export default function ComingSoon() {
         <section className={`relative ${styles.comingsoon}`}>
 
             <Container className="reveal">
-                <div className="flex flex-col pr-[7rem] text-[2.91rem] pt-[5rem]">
+                <div className="flex flex-col text-[4.5vw] md:text-[4vw] pt-[.5rem] md:pt-[5rem] xl:pr-[7rem] xl:text-[2.91rem] xl:pt-[5rem]">
                     <div className="flex items-end">
+                        <img src={C} alt="" className='xl:mb-[10px] max-w-[10vw] mb-[5px]' />
                         {/* <img src={BlikImg_2} alt="" className='mb-[.6rem]' /> */}
-                        <span className="font-second text-[17.3rem] leading-[.4] mr-[10px] mb-[5px] relative">
-                            <img src={BlikImg} alt="" className="absolute -right-[65%] bottom-[70%]" />
-                            С</span><span className="font-main relative uppercase leading-[1.1]"> овсем скоро в нашей жизни</span>
+                        <span className="font-main relative uppercase leading-[1.3] md:leading-[1.1] right-[2vw] xl:right-[3rem]">овсем скоро в нашей жизни</span>
                     </div>
-                    <span className="ml-auto font-main uppercase leading-[1.1] pr-[7px]">произойдёт особенное</span>
-                    <span className="ml-auto font-main uppercase leading-[1.1] pr-[7px]">событие —</span>
+                    <span className="ml-auto font-main uppercase leading-[1.3] md:leading-[1.1] pr-[7px]">произойдёт особенное</span>
+                    <span className="ml-auto font-main uppercase leading-[1.3] md:leading-[1.1] pr-[7px]">событие —</span>
                 </div>
-                <div className="flex flex-col w-[39vw] min-w-[750px] ml-auto mt-[10px]  items-end">
-                    <div className="items-end justify-end text-[2.91rem]">
-                        {/* <img src={M} alt="" className='mb-[1rem]' /> */}
-                        <span className="font-second text-[17.3rem] leading-[.6] mr-[10px] mb-[5px] text-main-yellow">М</span>
-                        <span className="font-main title_gradient gradient-default relative uppercase">ы станем семьей</span>
+                <div className="flex flex-col xl:w-[42vw] md:w-full xl:min-w-[750px] ml-auto mt-[10px]  md:items-end">
+                    <div className="flex items-end md:justify-end xl:text-[2.91rem] text-[4.5vw] md:text-[4vw] xl:-mr-[2.7rem] -mr-[3vw]">
+                        <img src={M} alt="" className='xl:mb-[10px] mb-[5px] max-w-[20vw]' />
+                        {/* <span className="font-second text-[20vw] xl:text-[17.3rem] leading-[.6] mr-[5px] md:mr-[10px] mb-[5px] text-main-yellow">М</span> */}
+                        <span className="font-main title_gradient gradient-default relative uppercase right-[3vw] xl:right-[2.7rem]">ы станем семьей</span>
                     </div>
-                    <div className="font-main text-[1.25rem] leading-[1.1]">Мы будем счастливы, если вы прийдете<br></br> и разделите этот день вместе с нами</div>
+                    <div className="font-main text-[4vw] md:text-[2.3vw] xl:text-[1.25rem] leading-[1.1] max-w-[81%] md:max-w-[100%]  ml-auto md:ml-0 text-justify md:text-left">Мы будем счастливы, если вы прийдете<br className="hidden md:block"></br> и разделите этот день вместе с нами</div>
                 </div>
             </Container>
 
