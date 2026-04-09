@@ -117,7 +117,7 @@ export default function Form() {
           `}
                 >
                     {/* Заголовок */}
-                    <div className="uppercase text-nowrap text-center text-[1.3rem] md:text-[2rem] xl:text-[2.5rem] tracking-tight absolute left-1/2 -translate-x-1/2 -top-[7px] md:-top-[10px]">
+                    <div className="uppercase text-nowrap text-center text-[1.2rem] md:text-[2rem] xl:text-[3rem] tracking-tight absolute left-1/2 -translate-x-1/2 -top-[7px] md:-top-[10px]">
                         <div className="flex items-end justify-center">
                             <img src={a} className="xl:mb-[10px] max-w-[18vw] md:max-w-[12vw] mb-[7px] md:mb-[10px]" alt="" />
                             <span className="gradient-default title_gradient xl:right-[1.5rem] right-[4vw] md:right-[2vw] relative">нкета</span></div>

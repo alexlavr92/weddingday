@@ -155,7 +155,7 @@ export default function Header() {
                         <div className="flex items-center gap-[30px]">
                             {phones.map(p => (
                                 <a
-                                    className="font-normal text-[14px] md:text-[1.25rem]"
+                                    className="font-normal text-[4vw] md:text-[1.25rem]"
                                     key={p.raw} href={`tel:${p.raw}`}>
                                     {p.formatted}
                                 </a>

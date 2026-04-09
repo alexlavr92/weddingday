@@ -40,9 +40,9 @@ export default function MiddleBlock() {
             <div className={`${styles.gifts} pt-[88px] md:pt-[94px] xl:pt-[9.5rem] xl:pb-[2.5rem]`}>
                 <Container className='reveal'>
                     <div className={`${styles.gifts_wrapper} w-full xl:max-w-[1250px] mx-auto`}>
-                        <div className="mx-auto title title_gradient gradient-default text-center uppercase text-[1.5rem] md:text-[1.8rem] xl:text-[2.8rem] leading-[1.3] md:leading-[1.2]">Ваше присутствие на нашем празднике —<br></br>
+                        <div className="mx-auto title title_gradient gradient-default text-center uppercase text-[1.5rem] md:text-[1.8rem] xl:text-[2.9rem] leading-[1.1]">Ваше присутствие на нашем празднике<br className="md:hidden"></br> —<br></br>
                             уже самый ценный подарок для нас</div>
-                        <div className={`${styles.gifts_items} flex flex-col xl:gap-0 gap-[10px] text-[1rem] md:text-[1.3rem] leading-[1.3] xl:text-[1.5rem] mt-[20px] md:mt-[30px] xl:leading-[1.2]`}>
+                        <div className={`${styles.gifts_items} flex flex-col xl:mx-auto xl:gap-0 gap-[10px] text-[1rem] md:text-[1.3rem] leading-[1.3] xl:text-[1.5rem] mt-[20px] md:mt-[30px] xl:leading-[1.2]`}>
                             <div className="xl:w-[550px] w-full md:max-w-[688px] md:mx-auto xl:max-w-none xl:mx-0 rounded-[30px] border-b-2 border-third-yellow xl:p-[40px] px-[10px] py-[20px] md:px-[100px] md:py-[40px]">Мы также будем благодарны, если <span className='text-third-yellow'>вместо цветов вы выберете небольшой знак внимания или поздравление в конверте —</span>  так он точно отправится вместе с нами в новую семейную историю</div>
                             <div className="xl:w-[550px] w-full md:max-w-[688px] md:mx-auto xl:max-w-none xl:mx-0 rounded-[30px] border-t-2 border-third-yellow xl:p-[40px] px-[10px] py-[20px] md:px-[100px] md:py-[40px] 
                             xl:ml-auto relative">

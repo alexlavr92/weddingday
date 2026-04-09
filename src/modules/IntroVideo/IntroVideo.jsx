@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function IntroVideo({
-    mobileSrc,
     desktopSrc,
+    introWebmSrc,
     children
 }) {
     const videoRef = useRef(null);
@@ -93,7 +93,11 @@ export default function IntroVideo({
                             autoPlay
                             muted
                             playsInline
-                        />
+                            preload="auto"
+                        >
+                            <source src={introWebmSrc} type="video/webm" />
+                            <source src={src} type="video/mp4" />
+                        </video>
                     )}
 
                     {/* Fade-to-black слой */}

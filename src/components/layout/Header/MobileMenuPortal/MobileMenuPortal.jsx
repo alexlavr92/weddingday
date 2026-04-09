@@ -49,13 +49,13 @@ function MobileMenuPortal({ open, onClose, navItems, phones, onNavClick }) {
                 <button
                     key={item.id}
                     onClick={() => onNavClick(item.id)}
-                    className="tracking-wider uppercase text-[1rem] font-semibold"
+                    className="tracking-wider uppercase text-[18px] font-semibold"
                 >
                     {item.label}
                 </button>
             ))}
 
-            <div className="flex flex-col gap-[5px] mt-[30px] text-[1rem]">
+            <div className="flex flex-col gap-[5px] mt-[30px] text-[18px]">
                 {phones.map(p => (
                     <a key={p.raw} href={`tel:${p.raw}`}>
                         {p.formatted}

@@ -4,8 +4,7 @@ import Footer from "./Footer/Footer";
 
 import IntroVideo from "../../modules/IntroVideo/IntroVideo";
 import introDesktop from "../../assets/videos/intro-desktop.mp4";
-// import introMobile from "../../assets/videos/intro-mobile.mp4";
-
+import introWebm from "../../assets/videos/intro-desktop.webm";
 export default function Layout({ children, title = "Wedding Day" }) {
     return (
         <HelmetProvider>
@@ -19,7 +18,7 @@ export default function Layout({ children, title = "Wedding Day" }) {
             <div className="min-h-screen flex flex-col">
                 <IntroVideo
                     desktopSrc={introDesktop}
-
+                    introWebmSrc={introWebm}
                 >
                     <Header />
 
