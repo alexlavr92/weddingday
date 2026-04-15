@@ -25,6 +25,8 @@ export default function Form() {
         handleSubmit,
         watch,
         reset,
+        resetField, setValue,
+        clearErrors,
         formState: { errors }
     } = useForm({
         defaultValues: {
@@ -38,6 +40,45 @@ export default function Form() {
             allergyText: ""
         }
     });
+
+    const comeValue = watch("come"); // "yes" | "no" | undefined
+    const skipIfNotComing = (fn) => (value) => {
+        if (comeValue === "no") return true;
+        return fn(value);
+    };
+
+    useEffect(() => {
+        if (comeValue === "no") {
+
+            // очищаем ошибки всех зависимых полей
+            clearErrors([
+                "together",
+                "partnerFio",
+                "dresscode",
+                "food",
+                "allergyText",
+                "drinks"
+            ]);
+
+            // Радио-группы
+            resetField("together");
+            resetField("dresscode");
+
+            // Поле ФИО пары
+            resetField("partnerFio");
+
+            // Еда
+            setValue("food", []); // чекбоксы — массив
+
+            // Аллергии
+            resetField("allergyText");
+
+            // Напитки
+            setValue("drinks", []);
+        }
+    }, [comeValue]);
+
+
 
     const food = watch("food");
     const together = watch("together");
@@ -177,18 +218,20 @@ export default function Form() {
                                         label="Нет, Один (Одна)"
                                         name="together"
                                         value="no"
+                                        disabled={comeValue === "no"}
                                         error={errors.together}
                                         {...register("together", {
-                                            required: "Выберите один из вариантов"
+                                            required: comeValue === "no" ? false : "Выберите один из вариантов"
                                         })}
                                     />
                                     <Radio
                                         label="Да"
                                         name="together"
                                         value="yes"
+                                        disabled={comeValue === "no"}
                                         error={errors.together}
                                         {...register("together", {
-                                            required: "Выберите один из вариантов"
+                                            required: comeValue === "no" ? false : "Выберите один из вариантов"
                                         })}
                                     />
                                     {errors.together && (
@@ -200,14 +243,14 @@ export default function Form() {
                                         <InputField
                                             label="ФИО вашей пары"
                                             id="partnerFio"
+                                            disabled={comeValue === "no"}
                                             placeholder="Напишите ФИО"
                                             wrapperClass="xl:w-[400px] w-full"
                                             error={errors.partnerFio?.message}
                                             {...register("partnerFio", {
-                                                validate: (v) =>
-                                                    hasTogether
-                                                        ? v.trim().length > 0 || "Заполните обязательное поле"
-                                                        : true
+                                                validate: skipIfNotComing((v) =>
+                                                    hasTogether ? v.trim().length > 0 || "Заполните обязательное поле" : true
+                                                )
                                             })}
                                         />
                                     </div>
@@ -222,18 +265,20 @@ export default function Form() {
                                         label="Конечно"
                                         name="dresscode"
                                         value="yes"
+                                        disabled={comeValue === "no"}
                                         error={errors.dresscode}
                                         {...register("dresscode", {
-                                            required: "Выберите один из вариантов"
+                                            required: comeValue === "no" ? false : "Выберите один из вариантов"
                                         })}
                                     />
                                     <Radio
                                         label="Нужна помощь"
                                         name="dresscode"
                                         value="no"
+                                        disabled={comeValue === "no"}
                                         error={errors.dresscode}
                                         {...register("dresscode", {
-                                            required: "Выберите один из вариантов"
+                                            required: comeValue === "no" ? false : "Выберите один из вариантов"
                                         })}
                                     />
                                     {errors.dresscode && (
@@ -253,37 +298,45 @@ export default function Form() {
                                     <Checkbox
                                         label="Нет"
                                         value="no"
+                                        disabled={comeValue === "no"}
                                         error={errors.food}
                                         {...register("food", {
-                                            validate: (v) =>
+                                            validate: skipIfNotComing((v) =>
                                                 v?.length > 0 || "Выберите хотя бы один вариант"
+                                            )
                                         })}
                                     />
                                     <Checkbox
                                         label="Вегетарианское меню"
                                         value="vegetable"
+                                        disabled={comeValue === "no"}
                                         error={errors.food}
                                         {...register("food", {
-                                            validate: (v) =>
+                                            validate: skipIfNotComing((v) =>
                                                 v?.length > 0 || "Выберите хотя бы один вариант"
+                                            )
                                         })}
                                     />
                                     <Checkbox
                                         label="Не ем рыбу"
                                         value="not-fish"
                                         error={errors.food}
+                                        disabled={comeValue === "no"}
                                         {...register("food", {
-                                            validate: (v) =>
+                                            validate: skipIfNotComing((v) =>
                                                 v?.length > 0 || "Выберите хотя бы один вариант"
+                                            )
                                         })}
                                     />
                                     <Checkbox
                                         label="Есть аллергии"
                                         value="allergy"
                                         error={errors.food}
+                                        disabled={comeValue === "no"}
                                         {...register("food", {
-                                            validate: (v) =>
+                                            validate: skipIfNotComing((v) =>
                                                 v?.length > 0 || "Выберите хотя бы один вариант"
+                                            )
                                         })}
                                     />
                                     {errors.food && (
@@ -296,14 +349,13 @@ export default function Form() {
                                         <TextAreaField
                                             id="allergyText"
                                             placeholder="Укажите на что у вас аллергия"
+                                            disabled={comeValue === "no"}
                                             wrapperClass="xl:w-[400px] w-full"
                                             error={errors.allergyText?.message}
                                             {...register("allergyText", {
-                                                validate: (v) =>
-                                                    hasAllergy
-                                                        ? v.trim().length > 0 ||
-                                                        "Укажите, на что у вас аллергия"
-                                                        : true
+                                                validate: skipIfNotComing((v) =>
+                                                    hasAllergy ? v.trim().length > 0 || "Укажите, на что у вас аллергия" : true
+                                                )
                                             })}
                                         />
                                     </div>
@@ -317,37 +369,45 @@ export default function Form() {
                                     <Checkbox
                                         label="Вино"
                                         value="wine"
+                                        disabled={comeValue === "no"}
                                         error={errors.drinks}
                                         {...register("drinks", {
-                                            validate: (v) =>
+                                            validate: skipIfNotComing((v) =>
                                                 v?.length > 0 || "Выберите хотя бы один вариант"
+                                            )
                                         })}
                                     />
                                     <Checkbox
                                         label="Игристое"
                                         value="sparkling"
+                                        disabled={comeValue === "no"}
                                         error={errors.drinks}
                                         {...register("drinks", {
-                                            validate: (v) =>
+                                            validate: skipIfNotComing((v) =>
                                                 v?.length > 0 || "Выберите хотя бы один вариант"
+                                            )
                                         })}
                                     />
                                     <Checkbox
                                         label="Крепкий алкоголь"
                                         value="strong"
+                                        disabled={comeValue === "no"}
                                         error={errors.drinks}
                                         {...register("drinks", {
-                                            validate: (v) =>
+                                            validate: skipIfNotComing((v) =>
                                                 v?.length > 0 || "Выберите хотя бы один вариант"
+                                            )
                                         })}
                                     />
                                     <Checkbox
                                         label="Без алкоголя"
                                         value="no-alcohol"
                                         error={errors.drinks}
+                                        disabled={comeValue === "no"}
                                         {...register("drinks", {
-                                            validate: (v) =>
+                                            validate: skipIfNotComing((v) =>
                                                 v?.length > 0 || "Выберите хотя бы один вариант"
+                                            )
                                         })}
                                     />
                                     {errors.drinks && (

@@ -17,6 +17,15 @@
         border-color: rgba(#ffffff, .5)
     }
 
+    &:has(input:disabled) {
+        cursor: not-allowed;
+        opacity: .5;
+
+        &:hover {
+            border-color: rgba(#ffffff, .1);
+        }
+    }
+
     input {
         display: none;
 

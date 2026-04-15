@@ -1,135 +1,114 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function IntroVideo({
-    desktopSrc,
-    introWebmSrc,
-    children
-}) {
+export default function IntroVideo({ children }) {
     const videoRef = useRef(null);
-    const [isFinished, setIsFinished] = useState(false);
-    // const [src, setSrc] = useState(null);
-    const [fadeOut, setFadeOut] = useState(false);
+
+    const [videoZoom, setVideoZoom] = useState(false);
+    const [videoBlur, setVideoBlur] = useState(false);
+    const [videoFade, setVideoFade] = useState(false);
+
     const [contentVisible, setContentVisible] = useState(false);
-    const src = desktopSrc
+    const [introDone, setIntroDone] = useState(false);
 
-
-    // Выбор видео по разрешению
-    // useEffect(() => {
-    //     const width = window.innerWidth;
-    //     setSrc(width < 768 ? mobileSrc : desktopSrc);
-    // }, []);
-
-    // Автозапуск + iOS fix
     useEffect(() => {
-        if (!src || !videoRef.current) return;
-
         const video = videoRef.current;
+        if (!video) return;
 
-        const playVideo = () => {
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    // iOS блокирует autoplay → можно показать кнопку Play
-                });
-            }
-        };
-
-        playVideo();
+        const playPromise = video.play();
+        if (playPromise) playPromise.catch(() => { });
 
         const handleEnd = () => {
-            setFadeOut(true);
-            setTimeout(() => {
-                setIsFinished(true);
-                setTimeout(() => setContentVisible(true), 50); // даём 1 тик рендеру
-            }, 700);
+            // 1) Видео увеличивается
+            setVideoZoom(true);
+
+            // 2) Лёгкое размытие
+            setTimeout(() => setVideoBlur(true), 150);
+
+            // 3) Контент начинает проявляться СКВОЗЬ видео
+            setTimeout(() => setContentVisible(true), 300);
+
+            // 4) Видео начинает исчезать
+            setTimeout(() => setVideoFade(true), 450);
+
+            // 5) Полное скрытие видео
+            setTimeout(() => setIntroDone(true), 1000);
         };
 
         video.addEventListener("ended", handleEnd);
-
         return () => video.removeEventListener("ended", handleEnd);
-    }, [src]);
+    }, []);
 
-    // Блокировка скролла
+    // 🔒 Scroll lock
     useEffect(() => {
-        if (!isFinished) {
+        if (!introDone) {
+            // фиксируем страницу
             document.body.style.position = "fixed";
             document.body.style.top = "0";
             document.body.style.left = "0";
             document.body.style.right = "0";
+            document.body.style.overflow = "hidden";
         } else {
+            // возвращаем нормальный скролл
             document.body.style.position = "";
             document.body.style.top = "";
             document.body.style.left = "";
             document.body.style.right = "";
+            document.body.style.overflow = "";
         }
-
-        return () => {
-            document.body.style.position = "";
-            document.body.style.top = "";
-            document.body.style.left = "";
-            document.body.style.right = "";
-        };
-    }, [isFinished]);
-
-
-    const skipIntro = () => {
-        setFadeOut(true);
-        setTimeout(() => setIsFinished(true), 700);
-    };
+    }, [introDone]);
 
     return (
         <>
-            {/* Intro overlay */}
-            {!isFinished && (
+            {/* Контент — рендерится сразу, но сначала невидим */}
+            <div
+                className={`
+                    transition-all duration-[900ms]
+                    ease-[cubic-bezier(0.16,1,0.3,1)]
+                    ${contentVisible ? "opacity-100 blur-0" : "opacity-0 blur-[8px]"}
+                `}
+            >
+                {children}
+            </div>
+
+            {/* Видео поверх контента, но смешивается с ним */}
+            {!introDone && (
                 <div
-                    className={`fixed inset-0 bg-black flex items-center justify-center z-[999] transition-opacity duration-700 ${fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
-                        }`}
+                    className="fixed inset-0 z-[999] pointer-events-none overflow-hidden"
+                    style={{
+                        mixBlendMode: "lighten", // ← эффект проявления контента сквозь видео
+                    }}
                 >
-                    {src && (
+                    <div
+                        className={`
+                            w-full h-full
+                            transition-transform duration-[1200ms]
+                            ease-in
+                            ${videoZoom ? "scale-[12]" : "scale-100"}
+                        `}
+                        style={{
+                            filter: videoZoom ? "blur(1px)" : "none", // motion blur
+                        }}
+                    >
                         <video
                             ref={videoRef}
-                            src={src}
-                            className="w-full h-full object-cover object-center"
+                            className={`
+                                w-full h-full object-cover object-center
+                                transition-all duration-[900ms]
+                                ${videoBlur ? "blur-[12px]" : "blur-0"}
+                                ${videoFade ? "opacity-0" : "opacity-100"}
+                            `}
                             autoPlay
                             muted
                             playsInline
                             preload="auto"
+                            poster="/poster.jpg"
                         >
-                            <source src={introWebmSrc} type="video/webm" />
-                            <source src={src} type="video/mp4" />
+                            <source src="/videos/intro-optimized.mp4" type="video/mp4" />
+                            <source src="/videos/intro-desktop-optimized.webm" type="video/webm" />
                         </video>
-                    )}
-
-                    {/* Fade-to-black слой */}
-                    <div
-                        className={`absolute inset-0 bg-black transition-opacity duration-700 ${fadeOut ? "opacity-100" : "opacity-0"
-                            }`}
-                    />
-
-                    {/* Skip intro */}
-                    {/* <button
-                    onClick={skipIntro}
-                    className="absolute bottom-10 px-6 py-3 bg-white/20 backdrop-blur-md text-white rounded-xl border border-white/30 hover:bg-white/30 transition"
-                >
-                    Skip intro
-                </button> */}
+                    </div>
                 </div>
             )}
-
-            {/* Контент */}
-            {isFinished && (
-                <div
-                    className={`
-            transition-opacity duration-[1200ms]
-            ${contentVisible ? "opacity-100" : "opacity-0"}
-        `}
-                >
-                    {children}
-                </div>
-            )}
-
-
-
         </>
     );
 }
